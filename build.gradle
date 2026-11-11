@@ -9,20 +9,12 @@ base { archivesName = project.archives_base_name }
 
 repositories {}
 
-loom {
-    splitEnvironmentSourceSets()
-    mods {
-        "villager-soldiers" {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
-        }
-    }
-}
-
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // Guard Villagers (MIT, by MrSterner): needed to compile; players install it separately in mods/
+    compileOnly files("libs/guardvillagers.jar")
 }
 
 processResources {
