@@ -37,8 +37,8 @@ public enum SoldierType {
                 Camel camel = EntityType.CAMEL.create(level, EntitySpawnReason.COMMAND);
                 prepMount(level, camel, pos);
                 // Camels carry 2: melee guard + ranged guard
-                soldier(level, pos, level.random.nextBoolean() ? Role.SWORD_SHIELD : Role.SPEAR_SHIELD, camel);
-                soldier(level, pos, level.random.nextBoolean() ? Role.BOW : Role.CROSSBOW, camel);
+                soldier(level, pos, level.getRandom().nextBoolean() ? Role.SWORD_SHIELD : Role.SPEAR_SHIELD, camel);
+                soldier(level, pos, level.getRandom().nextBoolean() ? Role.BOW : Role.CROSSBOW, camel);
             }
             case GHAST_SQUAD_BOW, GHAST_SQUAD_CROSSBOW -> {
                 Mob ghast = EntityType.HAPPY_GHAST.create(level, EntitySpawnReason.COMMAND);
