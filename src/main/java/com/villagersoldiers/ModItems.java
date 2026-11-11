@@ -1,6 +1,6 @@
 package com.villagersoldiers;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -44,8 +44,8 @@ public final class ModItems {
                     new SoldierEgg(new Item.Properties().setId(key), t));
             EGGS.add(egg);
         }
-        ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.SPAWN_EGGS)
-                .register(entries -> EGGS.forEach(entries::accept));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS)
+        .register(output -> EGGS.forEach(egg -> output.accept(egg)));
     }
     private ModItems() {}
 }
