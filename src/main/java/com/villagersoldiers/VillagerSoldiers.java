@@ -12,6 +12,7 @@ public class VillagerSoldiers implements ModInitializer {
     @Override
     public void onInitialize() {
         ModEntities.init();
+        ModItems.init();
 
         // /soldier spawn <type>   (op level 2)
         CommandRegistrationCallback.EVENT.register((dispatcher, ctx, env) ->

@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "villager-soldiers:item/ghast_squad_bow_egg",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": 15921906
+      },
+      {
+        "type": "minecraft:constant",
+        "value": 4094782
+      }
+    ]
+  }
+}
