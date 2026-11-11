@@ -48,13 +48,15 @@ public class SoldierEntity extends Villager {
         EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND,
         EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET };
 
-    private final SimpleContainer gear = new SimpleContainer(INV_SIZE);
+      private final SimpleContainer gear = new SimpleContainer(INV_SIZE) {
+       @Override public void setChanged() { super.setChanged(); SoldierEntity.this.syncEquipment(); }
+   };
     private SoldierType.Role role = SoldierType.Role.SWORD_SHIELD;
     private boolean syncing = false;
 
     public SoldierEntity(EntityType<? extends Villager> type, Level level) {
         super(type, level);
-        gear.addListener(c -> syncEquipment());
+        
     }
 
     public static AttributeSupplier.Builder createSoldierAttributes() {
