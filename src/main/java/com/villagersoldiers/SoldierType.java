@@ -1,11 +1,12 @@
 package com.villagersoldiers;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.animal.camel.Camel;
-import net.minecraft.world.entity.animal.equine.Horse;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,24 +30,31 @@ public enum SoldierType {
             case INFANTRY_ARCHER -> soldier(level, pos, Role.BOW, null);
             case ARTILLERY -> soldier(level, pos, Role.ARTILLERY, null);
             case HORSE_SWORD, HORSE_SPEAR -> {
-                Horse horse = EntityType.HORSE.create(level, EntitySpawnReason.COMMAND);
+                Mob horse = makeMount(level, "horse");
                 prepMount(level, horse, pos);
                 soldier(level, pos, this == HORSE_SWORD ? Role.SWORD_SHIELD : Role.SPEAR_SHIELD, horse);
             }
             case CAMEL_GUARDS -> {
-                Camel camel = EntityType.CAMEL.create(level, EntitySpawnReason.COMMAND);
+                Mob camel = makeMount(level, "camel");
                 prepMount(level, camel, pos);
                 // Camels carry 2: melee guard + ranged guard
                 soldier(level, pos, level.getRandom().nextBoolean() ? Role.SWORD_SHIELD : Role.SPEAR_SHIELD, camel);
                 soldier(level, pos, level.getRandom().nextBoolean() ? Role.BOW : Role.CROSSBOW, camel);
             }
             case GHAST_SQUAD_BOW, GHAST_SQUAD_CROSSBOW -> {
-                Mob ghast = EntityType.HAPPY_GHAST.create(level, EntitySpawnReason.COMMAND);
+                Mob ghast = makeMount(level, "happy_ghast");
                 prepMount(level, ghast, pos.add(0, 3, 0));
                 for (int i = 0; i < 4; i++) // happy ghast seats 4
                     soldier(level, pos, this == GHAST_SQUAD_BOW ? Role.BOW : Role.CROSSBOW, ghast);
             }
         }
+    }
+
+    /** Looks the mount up by its registry id so it doesn't depend on EntityType constant names. */
+    private static Mob makeMount(ServerLevel level, String id) {
+        EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.withDefaultNamespace(id));
+        Entity e = type.create(level, EntitySpawnReason.COMMAND);
+        return (Mob) e;
     }
 
     private static void prepMount(ServerLevel level, Mob mount, Vec3 pos) {
@@ -63,7 +71,7 @@ public enum SoldierType {
         s.setRole(role);                 // fills the inventory -> equipment
         s.setPersistenceRequired();
         level.addFreshEntity(s);
-        if (mount != null) s.startRiding(mount, true);
+        if (mount != null) s.startRiding(mount, true, true);
     }
 
     static ItemStack[] defaultKit(Role role) {
